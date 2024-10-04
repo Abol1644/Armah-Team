@@ -77,7 +77,7 @@ body {
     z-index:1;
     color:#fff;
     padding-bottom:10vh;
-    background-image: url(.//images/banner.jpg);
+    background-image: url(/images/banner.jpg);
     background-size: cover;
 }
 #middle::before {
