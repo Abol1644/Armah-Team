@@ -65,6 +65,9 @@ body {
     color:#fff;
     /* text-decoration:underline; */
 }
+#bio {
+    pointer-events: none;
+}
 #middle {
     width:100vw;
     height:90vh;
@@ -97,8 +100,9 @@ body {
     /* text-decoration:underline; */
 }
 #about {
-    width:10vw;
+    width:5vw;
     height:10vw;
+    padding-top: 5vw;
     text-align:center;
     font-size:25px;
     transform:rotate(-90deg);
@@ -113,6 +117,7 @@ body {
     z-index:4;
     transition:0.4s ease-in-out;
     border-radius:0px 0px 100px 100px;
+    pointer-events: none;
 }
 #work {
     width:10vw;
@@ -149,10 +154,10 @@ body {
     transition:0.4s ease-in-out;
     border-radius:100px 100px 0px 0px;
 }
-#about:hover {
+/* #about:hover {
     background:#03c39a;
     cursor:pointer;
-}
+} */
 #work:hover {
     background:#03c39a;
     cursor:pointer;
@@ -170,6 +175,7 @@ body {
 }
 .floating-cards {
 position: relative;
+top: -40px;
 width: 200px; /* Adjust according to your layout */
 height: 400px;
 z-index: -1; /* Behind the content */
@@ -177,35 +183,73 @@ z-index: -1; /* Behind the content */
 
 .card {
 position: absolute;
-width: 150px;
-height: 100px;
+width: 200px;
+height: 250px;
 border-radius: 15px;
 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 animation: floating 8s infinite ease-in-out;
+display: flex;
+justify-content: center; /* Horizontal center */
+align-items: center; /* Vertical center */
+text-align: center; /* Center text in case of multiple lines */ 
+color: #001a24;
+transition:0.4s ease-in-out;
 }
 
 .card1 {
-background-color: #ff4d4d; /* Red */
-top: 50px;
-left: 10px;
+background-color: #000000; /* Red */
+top: -50px;
+left: -70px;
+}
+
+.card1:hover {
+    background-color: #00ebb8;
+    left: 20px;
+}
+
+.card1:hover ~ .card2  {
+    top: 40px;
+}
+
+.card1:hover ~ .card3 {
+    top: 80px;
 }
 
 .card2 {
 background-color: #007bff; /* Blue */
-top: 100px;
-left: 50px;
+top: -10px;
+left: -45px;
+}
+
+.card2:hover {
+    background-color: #00ebb8;
+    left: 20px;
+}
+
+.card2:hover ~ .card1  {
+    top: 0px;
+}
+
+.card2:hover ~ .card3 {
+    top: 80px;
 }
 
 .card3 {
 background-color: #f1f1f1; /* White/Gray */
-top: 150px;
-left: 30px;
+top: 30px;
+left: -20px;
+}
+.card3:hover {
+    background-color: #00ebb8;
+    left: 20px;
 }
 
-.card4 {
-background-color: #333333; /* Dark */
-top: 200px;
-left: 70px;
+.card2:hover ~ .card1  {
+    top: 0px;
+}
+
+.card3:hover ~ .card2 {
+    top: 40px;
 }
 
 @keyframes floating {
