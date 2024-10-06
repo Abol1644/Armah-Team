@@ -1,10 +1,10 @@
-// function showabout(){
-//     $("#about_container").css("display","inherit");
-//     $("#about_container").addClass("animated slideInLeft");
-//     setTimeout(function(){
-//         $("#about_container").removeClass("animated slideInLeft");
-//     },800);
-// }
+function showabout(){
+    $("#about_container").css("display","inherit");
+    $("#about_container").addClass("animated slideInLeft");
+    setTimeout(function(){
+        $("#about_container").removeClass("animated slideInLeft");
+    },800);
+}
 function closeabout(){
     $("#about_container").addClass("animated slideOutLeft");
     setTimeout(function(){
@@ -51,10 +51,3 @@ setTimeout(function(){
       $("#work").removeClass("animated fadeIn");
     },1000);
 },1500);
-
-const aboutsection = document.querySelector('#about')
-const card1 = document.querySelector('.card1')
-const card2 = document.querySelector('.card2')
-card2.addEventListener('mouseover', () => {
-    card1.style.backgroundcolor = '03c39a';
-})

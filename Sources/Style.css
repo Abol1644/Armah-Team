@@ -100,9 +100,8 @@ body {
     /* text-decoration:underline; */
 }
 #about {
-    width:5vw;
+    width:10vw;
     height:10vw;
-    padding-top: 5vw;
     text-align:center;
     font-size:25px;
     transform:rotate(-90deg);
@@ -117,11 +116,11 @@ body {
     z-index:4;
     transition:0.4s ease-in-out;
     border-radius:0px 0px 100px 100px;
-    pointer-events: none;
 }
 #work {
-    width:10vw;
-    height:10vw;
+    width:5vw;
+    height:5vw;
+    padding-top: 5vw;
     text-align:center;
     font-size:25px;
     transform:rotate(90deg);
@@ -136,6 +135,8 @@ body {
     z-index:4;
     transition:0.4s ease-in-out;
     border-radius:0px 0px 100px 100px;
+    pointer-events: none;
+
 }
 #contact {
     width:10vw;
@@ -154,10 +155,10 @@ body {
     transition:0.4s ease-in-out;
     border-radius:100px 100px 0px 0px;
 }
-/* #about:hover {
+#about:hover {
     background:#03c39a;
     cursor:pointer;
-} */
+}
 #work:hover {
     background:#03c39a;
     cursor:pointer;
@@ -178,7 +179,12 @@ position: relative;
 top: -40px;
 width: 200px; /* Adjust according to your layout */
 height: 400px;
+margin-left: auto; /* Center the container */
 z-index: -1; /* Behind the content */
+}
+
+.floating-cards:hover {
+    cursor:pointer;
 }
 
 .card {
@@ -197,14 +203,14 @@ transition:0.4s ease-in-out;
 }
 
 .card1 {
-background-color: #000000; /* Red */
-top: -50px;
-left: -70px;
+background-color: #000000c5; /* Red */
+top: -70px;
+right: -70px;
 }
 
 .card1:hover {
     background-color: #00ebb8;
-    left: 20px;
+    right: 20px;
 }
 
 .card1:hover ~ .card2  {
@@ -216,14 +222,14 @@ left: -70px;
 }
 
 .card2 {
-background-color: #007bff; /* Blue */
-top: -10px;
-left: -45px;
+background-color: #007bffc5; /* Blue */
+top: -20px;
+right: -45px;
 }
 
 .card2:hover {
     background-color: #00ebb8;
-    left: 20px;
+    right: 20px;
 }
 
 .card2:hover ~ .card1  {
@@ -235,13 +241,13 @@ left: -45px;
 }
 
 .card3 {
-background-color: #f1f1f1; /* White/Gray */
-top: 30px;
-left: -20px;
+background-color: #f1f1f1c5; /* White/Gray */
+top: 40px;
+right: -20px;
 }
 .card3:hover {
     background-color: #00ebb8;
-    left: 20px;
+    right: 20px;
 }
 
 .card2:hover ~ .card1  {
