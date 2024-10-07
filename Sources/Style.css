@@ -57,13 +57,18 @@ body {
     display: none;
 }
 .signbutt{
-    transition: all 500ms;
+    transition: all 500ms ease;
 }
 #signupbutt{
-    transition: all 500ms;
+    transition: all 500ms ease;
 }
-#signinbutt{
-    transition: all 500ms;
+a{
+    text-decoration: none;
+    color : #fff;
+    transition:all 100ms;
+}
+a:hover{
+    color: #03c39a;
 }
 .signbutt:hover {
     cursor: pointer;
