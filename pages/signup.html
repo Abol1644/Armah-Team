@@ -12,21 +12,43 @@
         <form action="#">
           <div class="row">
             <i class="fas fa-user"></i>
-            <input type="email" placeholder="Email" required />
+            <input id="signup-email" type="email" placeholder="Email" required />
           </div>
           <div class="row">
             <i class="fas fa-lock"></i>
-            <input type="password" placeholder="Password" required />
+            <input id="signup-password" type="password" placeholder="Password" required />
           </div>
           <div class="row">
             <i class="fas fa-lock"></i>
-            <input type="password" placeholder="Password confirmation" required />
+            <input id="signup-password-confirmation" type="password" placeholder="Password confirmation" required />
           </div>
           <div class="row button">
-            <input type="submit" value="signUP" />
+            <input id="submit-signup" type="submit" value="signUP" />
           </div>
           <div class="signup-link">Already a member? <a href="/signin">signIN now</a></div>
         </form>
       </div>
 </body>
+<script>
+email = document.getElementById("signup-email");
+password = document.getElementById("signup-password");
+passwordConfirmation = document.getElementById("signup-password-confirmation");
+submit = document.getElementById("submit-signup");
+
+
+
+submit.addEventListener("click",()=>{ 
+  
+  let info = {
+  'email' : email.value,
+  'password' : password.value,
+  'passwordConfirmation': passwordConfirmation.value}
+  fetch("http://localhost:8000/api-add-new-user" , {
+  method:'POST',
+  headers: {'content-type': 'application/json'},
+  body:JSON.stringify(info)
+})})
+
+
+</script>
 </html>
