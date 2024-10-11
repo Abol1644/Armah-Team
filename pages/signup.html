@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="./../Sources/signinup.css">
 </head>
 <body>
-    <div class="wrapper-signup wrapper">
+    <div id="main-form-container" class="wrapper-signup wrapper">
         <div class="title"><span>signUP Form</span></div>
-        <form action="#">
+        <form id="signup-form" action="#">
           <div class="row">
             <i class="fas fa-user"></i>
             <input id="signup-email" type="email" placeholder="Email" required />
@@ -26,8 +26,19 @@
             <input id="submit-signup" type="submit" value="signUP" />
           </div>
           <div class="signup-link">Already a member? <a href="/signin">signIN now</a></div>
+
         </form>
       </div>
+      <div id="glass-container">
+    <div id="signedUpSuccessFully" style="
+        font-size: large;
+        text-align: center;">
+        <p id="signedUpSuccess">Signed up successfully</p>
+        <br>
+        <a id="signin?" href="/signin" style="color: #00FF85; text-decoration: underline;">Sign in?</a>
+    </div>
+</div>
+
 </body>
 <script>
 email = document.getElementById("signup-email");
@@ -37,8 +48,8 @@ submit = document.getElementById("submit-signup");
 
 
 
-submit.addEventListener("click",()=>{ 
-  
+submit.addEventListener("click",(a)=>{ 
+  a.preventDefault()
   let info = {
   'email' : email.value,
   'password' : password.value,
@@ -47,6 +58,12 @@ submit.addEventListener("click",()=>{
   method:'POST',
   headers: {'content-type': 'application/json'},
   body:JSON.stringify(info)
+}).then((data)=>{
+  console.log("ok until here : " + data)
+  if(data.status == 200){
+    document.getElementById('main-form-container').style.display = "none"
+    document.getElementById('glass-container').style.display = "flex"
+  }
 })})
 
 

@@ -128,3 +128,26 @@ form .signup-link a:hover {
   text-decoration: underline;
 }
 
+#glass-container{
+  background: rgba(255, 255, 255, 0.1); /* Changed to a lighter background for better visibility */
+  border-radius: 50px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px); /* Increased blur for a glass effect */
+  -webkit-backdrop-filter: blur(10px);
+  width: 40%;
+  height: 35%;
+  margin: auto;
+  display: none; /* Use flexbox for centering */
+  flex-direction: column; /* Stack children vertically */
+  justify-content: center; /* Center vertically */
+  align-items: center; /* Center horizontally */
+  font-size: x-large;
+  text-align: center;
+  position: absolute;
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Center using translate */
+  color: white; /* Set text color to white */
+  padding: 20px; /* Add some padding */
+  border: 1px solid rgba(255, 255, 255, 0.5); /* Optional: Add a border */
+}

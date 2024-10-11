@@ -12,8 +12,10 @@ const db = new sqlite3.Database("./../../users data/users-data.db" ,(err)=>{
     }
 })
 
+
 app.use(express.static(path.join(__dirname , "../../")));
 app.use(bodyParser.json());
+
 
 app.post("/api-add-new-user" , (req , res)=>{
     info = req.body
@@ -28,13 +30,17 @@ app.post("/api-add-new-user" , (req , res)=>{
     }
 }
 )
+
+
 app.get('/', (req , res)=>{
     res.sendFile("index.html");
 })
 
+
 app.get("/signup" , (req , res)=>{
     res.sendFile(path.join(__dirname , "../../pages/signup.html"))
 })
+
 
 app.get("/signin" , (req , res)=>{
     res.sendFile(path.join(__dirname , "../../pages/signin.html"))
