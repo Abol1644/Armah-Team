@@ -68,6 +68,11 @@ submit.addEventListener("click",(a)=>{
     alert("password and passowrd confirmation difrence recongnized.\ntry again carefully.")
     location.reload()
   }
+  else if(data.status == 401){
+    document.getElementById('signedUpSuccess').innerText = "email is already exists "
+    document.getElementById('main-form-container').style.display = "none"
+    document.getElementById('glass-container').style.display = "flex"
+  }
 })})
 
 

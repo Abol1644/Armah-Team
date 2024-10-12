@@ -30,12 +30,27 @@ app.use(bodyParser.json());
 app.post("/api-add-new-user" , (req , res)=>{
     info = req.body
     if(info.password == info.passwordConfirmation){
-        db.run(`INSERT INTO users(email,password) VALUES(?,?)` , [info.email , info.password] , (err)=>{
-            console.error(err)
-        })
-        res.status(200).send()
+        db.get(`SELECT EXISTS (
+            SELECT 1
+            FROM users
+            WHERE email = ? 
+        ) AS email_exists`, [info.email], (err, row) => {
+            if (err) {
+                console.error(err.message);
+            } else {
+                if(row.email_exists){
+                    res.status(401).send()
+                }
+                else if(!row.email_exists){
+                    db.run(`INSERT INTO users(email,password) VALUES(?,?)` , [info.email , info.password] , (err)=>{
+                        console.error(err)
+                    })
+                    res.status(200).send()
+                }
+            }
+        });
     }
-    else{
+    else if(info.password != info.passwordConfirmation){
         res.status(400).send()
     }
 }
