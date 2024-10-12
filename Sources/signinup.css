@@ -150,4 +150,6 @@ form .signup-link a:hover {
   color: white; /* Set text color to white */
   padding: 20px; /* Add some padding */
   border: 1px solid rgba(255, 255, 255, 0.5); /* Optional: Add a border */
+  min-width: 400px;
+  min-height: 200px;
 }

@@ -3,8 +3,10 @@ const path = require('path');
 const app = express();
 const sqlite3 = require('sqlite3').verbose()
 const bodyParser = require('body-parser');
-//db
 
+
+
+//db{
 
 const db = new sqlite3.Database("./../../users data/users-data.db" ,(err)=>{
     if(err){
@@ -12,10 +14,18 @@ const db = new sqlite3.Database("./../../users data/users-data.db" ,(err)=>{
     }
 })
 
+//}
+
+
 
 app.use(express.static(path.join(__dirname , "../../")));
 app.use(bodyParser.json());
 
+// db.run(`DELETE FROM users`)
+
+
+
+//signup page{
 
 app.post("/api-add-new-user" , (req , res)=>{
     info = req.body
@@ -23,14 +33,19 @@ app.post("/api-add-new-user" , (req , res)=>{
         db.run(`INSERT INTO users(email,password) VALUES(?,?)` , [info.email , info.password] , (err)=>{
             console.error(err)
         })
-        return res.status(200).send()
+        res.status(200).send()
     }
     else{
-        alert("signup ERROR : password and passowrd confirmation has difrences")
+        res.status(400).send()
     }
 }
 )
 
+//}
+
+
+
+//routes{
 
 app.get('/', (req , res)=>{
     res.sendFile("index.html");
@@ -51,3 +66,4 @@ app.listen(8000 , ()=>{
     console.log('app running on port 8000')
 })
 
+//}

@@ -64,6 +64,10 @@ submit.addEventListener("click",(a)=>{
     document.getElementById('main-form-container').style.display = "none"
     document.getElementById('glass-container').style.display = "flex"
   }
+  else if(data.status == 400){
+    alert("password and passowrd confirmation difrence recongnized.\ntry again carefully.")
+    location.reload()
+  }
 })})
 
 
