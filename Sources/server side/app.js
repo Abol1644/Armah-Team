@@ -29,7 +29,12 @@ app.use(bodyParser.json());
 
 app.post("/api-add-new-user" , (req , res)=>{
     info = req.body
-    if(info.password == info.passwordConfirmation){
+    if(info.password.length < 6){
+        console.log(23232)
+        res.status(402).send()
+    }
+    else if(info.password == info.passwordConfirmation){
+
         db.get(`SELECT EXISTS (
             SELECT 1
             FROM users

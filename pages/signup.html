@@ -23,6 +23,7 @@
             <input id="signup-password-confirmation" type="password" placeholder="Password confirmation" required />
           </div>
           <div class="row button">
+            <p id="passisshort" style="color: red; display:none">your password is short. it must be at least 6 letters.</p>
             <input id="submit-signup" type="submit" value="signUP" />
           </div>
           <div class="signup-link">Already a member? <a href="/signin">signIN now</a></div>
@@ -72,6 +73,10 @@ submit.addEventListener("click",(a)=>{
     document.getElementById('signedUpSuccess').innerText = "email is already exists "
     document.getElementById('main-form-container').style.display = "none"
     document.getElementById('glass-container').style.display = "flex"
+  }
+  else if(data.status == 402){
+    document.getElementById("passisshort").style.display = "block"
+    
   }
 })})
 
