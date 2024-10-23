@@ -3,7 +3,8 @@ const path = require('path');
 const app = express();
 const sqlite3 = require('sqlite3').verbose()
 const bodyParser = require('body-parser');
-
+const bcrypt = require('bcrypt');
+const cors = require('cors');
 
 
 //db{
@@ -15,7 +16,6 @@ const db = new sqlite3.Database("./../../users data/users-data.db" ,(err)=>{
 })
 
 //}
-
 
 
 app.use(express.static(path.join(__dirname , "../../")));
@@ -46,10 +46,22 @@ app.post("/api-add-new-user" , (req , res)=>{
                     res.status(401).send()
                 }
                 else if(!row.email_exists){
-                    db.run(`INSERT INTO users(email,password) VALUES(?,?)` , [info.email , info.password] , (err)=>{
-                        console.error(err)
-                    })
-                    res.status(200).send()
+
+                    const saltRounds = 10;
+                    const plainPassword = info.password;
+                    
+                    bcrypt.hash(plainPassword, saltRounds, (err, hash) => {
+                        if (err) {
+                            console.error('Error hashing password:', err);
+                            return;
+                        }
+            
+                        console.log('Hashed password:', hash);
+                        db.run(`INSERT INTO users(email,password) VALUES(?,?)` , [info.email , hash] , (err)=>{
+                            console.error(err)
+                        })
+                        res.status(200).send()
+                    });                    
                 }
             }
         });
@@ -63,30 +75,48 @@ app.post("/api-add-new-user" , (req , res)=>{
 //}
 
 //signinpage{
-
-app.post('/signin-API' , (req , res)=>{
-
-    info = req.body
-
-    let Query = `SELECT password FROM users WHERE email = ?`
-
-    db.get(Query , [info.email] , (err ,row)=>{
-        if (err) {
-            return res.status(500).json({ error: 'Database error' });
-        }
-        if (!row) {
-            console.log(info.email)
-            return res.status(401).json({ error: 'Email not found' });
-        }
-        if(row){
-            if(info.password == row.password){
-                return res.status(200).json({message: 'successfully signed in!'})
+    app.post('/signin-API', (req, res) => {
+        const { email, password } = req.body;  
+        const Query = `SELECT password FROM users WHERE email = ?`;
+    
+        db.get(Query, [email], (err, row) => {
+            if (err) {
+                return res.status(500).json({ error: 'Database error' });
             }
-        }
-    })
-
-
-})
+            if (!row) {
+                return res.status(401).json({ error: 'Email not found' });
+            }
+    
+            const storedHashedPassword = row.password;
+    
+      
+            console.log('Provided password:', password);
+            console.log('Stored hashed password:', storedHashedPassword);
+    
+        
+            if (!password || !storedHashedPassword) {
+                return res.status(400).json({ error: 'Password is missing or invalid' });
+            }
+    
+    
+            bcrypt.compare(password, storedHashedPassword, (err, isMatch) => {
+                if (err) {
+                    console.error('Error comparing passwords:', err);
+                    return res.status(500).json({ error: 'Error comparing passwords' });
+                }
+    
+            
+                console.log('isMatch value:', isMatch);
+    
+                if (isMatch) {
+                    return res.status(200).json({ message: 'Successfully signed in!' });
+                } else {
+                    return res.status(401).json({ error: 'Invalid password' });
+                }
+            });
+        });
+    });
+    
 
 //}
 
