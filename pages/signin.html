@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./../Sources/signinup.css">
 </head>
 <body>
-    <div class="wrapper">
+    <div id="main-form-container" class="wrapper">
         <div class="title"><span>signIN Form</span></div>
         <form action="#">
           <div class="row">
@@ -20,10 +20,59 @@
           </div>
           <div class="pass"><a href="#">Forgot password?</a></div>
           <div class="row button">
-            <input type="submit" value="Login" />
+            <input id="signin-submit" type="submit" value="Login" />
           </div>
           <div class="signup-link">Not a member? <a href="/signup">Signup now</a></div>
         </form>
       </div>
+      <div id="glass-container">
+        <div id="signedUpSuccessFully" style="
+            font-size: large;
+            text-align: center;">
+            <p id="signedInSuccess">Signed in successfully</p>
+            <br>
+            <a id="homePage?" href="/signin" style="color: #00FF85; text-decoration: underline;">Home?</a>
+        </div>
+    </div>
     </body>
+    <script>
+      let email = document.getElementById('signin-email')
+      let password = document.getElementById('signin-password')
+      let submit = document.getElementById('signin-submit')
+
+      submit.addEventListener('click' , (e)=>{
+        e.preventDefault()
+        let info = {
+          'email': email.value,
+          'passowrd' : password.value}
+
+          fetch('http://localhost:8000/signin-API' , 
+            { method:'POST',
+              headers: {'content-type': 'application/json'},
+              body:JSON.stringify(info)
+            }
+          ).then(data=>{
+            if(data.status == 200){
+              console.log('suprise')
+              document.getElementById('main-form-container').style.display = "none"
+              document.getElementById('glass-container').style.display = "flex"
+              document.getElementById('signedInSuccess').innerText = `${info.email} successfully signedin`
+              document.getElementById('homePage?').innerText = "Home?"
+              document.getElementById('homePage?').href = '/'
+            }else if (data.status== 500){
+              console.log(data.console.error); 
+            }else if (data.status == 401){
+              document.getElementById('main-form-container').style.display = "none"
+              document.getElementById('glass-container').style.display = "flex"
+              document.getElementById('signedInSuccess').innerText = `${info.email} is not signed up`
+              document.getElementById('homePage?').innerText = "sign up?"
+              document.getElementById('homePage?').href = '/signup'
+            }
+
+          }).catch(err=>{
+            console.log(err)
+          })
+      })
+
+    </script>
 </html>

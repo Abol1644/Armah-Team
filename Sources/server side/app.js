@@ -30,7 +30,6 @@ app.use(bodyParser.json());
 app.post("/api-add-new-user" , (req , res)=>{
     info = req.body
     if(info.password.length < 6){
-        console.log(23232)
         res.status(402).send()
     }
     else if(info.password == info.passwordConfirmation){
@@ -63,7 +62,33 @@ app.post("/api-add-new-user" , (req , res)=>{
 
 //}
 
+//signinpage{
 
+app.post('/signin-API' , (req , res)=>{
+
+    info = req.body
+
+    let Query = `SELECT password FROM users WHERE email = ?`
+
+    db.get(Query , [info.email] , (err ,row)=>{
+        if (err) {
+            return res.status(500).json({ error: 'Database error' });
+        }
+        if (!row) {
+            console.log(info.email)
+            return res.status(401).json({ error: 'Email not found' });
+        }
+        if(row){
+            if(info.password == row.password){
+                return res.status(200).json({message: 'successfully signed in!'})
+            }
+        }
+    })
+
+
+})
+
+//}
 
 //routes{
 

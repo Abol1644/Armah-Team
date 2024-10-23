@@ -60,14 +60,14 @@ submit.addEventListener("click",(a)=>{
   headers: {'content-type': 'application/json'},
   body:JSON.stringify(info)
 }).then((data)=>{
-  console.log("ok until here : " + data)
   if(data.status == 200){
     document.getElementById('main-form-container').style.display = "none"
     document.getElementById('glass-container').style.display = "flex"
   }
   else if(data.status == 400){
     alert("password and passowrd confirmation difrence recongnized.\ntry again carefully.")
-    location.reload()
+    password.value = ''
+    passwordConfirmation.value = ''
   }
   else if(data.status == 401){
     document.getElementById('signedUpSuccess').innerText = "email is already exists "
@@ -76,10 +76,7 @@ submit.addEventListener("click",(a)=>{
   }
   else if(data.status == 402){
     document.getElementById("passisshort").style.display = "block"
-    
-  }
+    }
 })})
-
-
 </script>
 </html>
