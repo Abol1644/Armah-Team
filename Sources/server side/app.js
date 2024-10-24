@@ -74,6 +74,11 @@ app.post("/api-add-new-user" , (req , res)=>{
 
 //}
 
+db.run(`
+ALTER TABLE user
+ADD COLUMN a_token CHAR(602) [DEFAULT "0"] [NOT NULL]`)
+
+
 //signinpage{
     app.post('/signin-API', (req, res) => {
         const { email, password } = req.body;  
