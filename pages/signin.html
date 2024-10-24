@@ -18,7 +18,10 @@
             <i class="fas fa-lock"></i>
             <input id="signin-password" type="password" placeholder="Password" required />
           </div>
-          <div class="pass"><a href="#">Forgot password?</a></div>
+
+          <label class="signup-link" style="align-items:center;display: flex;margin-top: 10px;margin-bottom:10px ;"> <input style="height: 25px; width: 25px;" id="rememberMe" type="checkbox">rememberMe</label>
+
+          <div><a href="#">Forgot password?</a></div>
           <div class="row button">
             <input id="signin-submit" type="submit" value="Login" />
           </div>
@@ -39,13 +42,18 @@
 let email = document.getElementById('signin-email');
 let password = document.getElementById('signin-password');
 let submit = document.getElementById('signin-submit');
+let rememberMe = document.getElementById('rememberMe')
+
 
 submit.addEventListener('click', async (e) => {
     e.preventDefault();
     
+
+
     let info = {
         'email': email.value,
-        'password': password.value  // Use .value to get the input field's value
+        'password': password.value ,
+        'rememberMe' : rememberMe.checked // Use .value to get the input field's value
     };
 
     fetch('http://localhost:8000/signin-API', {

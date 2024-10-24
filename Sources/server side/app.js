@@ -1,10 +1,13 @@
 const express = require('express');
+const session = require('express-session')
 const path = require('path');
 const app = express();
 const sqlite3 = require('sqlite3').verbose()
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
+const jwt = require('jsonwebtoken')
+const cookieParser = require('cookie-parser')
 
 
 //db{
@@ -20,11 +23,18 @@ const db = new sqlite3.Database("./../../users data/users-data.db" ,(err)=>{
 
 app.use(express.static(path.join(__dirname , "../../")));
 app.use(bodyParser.json());
+app.use(cookieParser())
+
 
 // db.run(`DELETE FROM users`)
 
 
-
+app.use(session({
+    secret: 'd82a43eb1d837f45e9e9a5c3fa213ba8c6728d68a6cd09a7f743cfa7a82a1f8cd44f00aa739b67c132f99039c07e9c69',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 }
+}));
 //signup page{
 
 app.post("/api-add-new-user" , (req , res)=>{
@@ -74,17 +84,18 @@ app.post("/api-add-new-user" , (req , res)=>{
 
 //}
 
-db.run(`
-ALTER TABLE user
-ADD COLUMN a_token CHAR(602) [DEFAULT "0"] [NOT NULL]`)
+// db.run(`
+// ALTER TABLE users
+// ADD COLUMN a_token CHAR(602)`)
 
 
 //signinpage{
     app.post('/signin-API', (req, res) => {
-        const { email, password } = req.body;  
+        const { email, password , rememberMe } = req.body;  
         const Query = `SELECT password FROM users WHERE email = ?`;
-    
+
         db.get(Query, [email], (err, row) => {
+        
             if (err) {
                 return res.status(500).json({ error: 'Database error' });
             }
@@ -114,20 +125,43 @@ ADD COLUMN a_token CHAR(602) [DEFAULT "0"] [NOT NULL]`)
                 console.log('isMatch value:', isMatch);
     
                 if (isMatch) {
+                    const id = db.run(`SELECT id FROM users WHERE email = ?` , [email])
+                    const token = jwt.sign({ id:id, email:email }, 'd82a43eb1d837f45e9e9a5c3fa213ba8c6728d68a6cd09a7f743cfa7a82a1f8cd44f00aa739b67c132f99039c07e9c69', { expiresIn: rememberMe ? '7d' : '1d' })
+                    res.cookie('token', token, {
+                        httpOnly: true,
+                        secure: false,
+                        maxAge: rememberMe ? 7 * 24 * 60 * 60 * 1000 : 24 * 60 * 60 * 1000
+                    });
                     return res.status(200).json({ message: 'Successfully signed in!' });
                 } else {
                     return res.status(401).json({ error: 'Invalid password' });
                 }
+        
             });
         });
     });
     
+    const authenticateUser = (req, res, next) => {
+        const token = req.cookies.token;
+        if (!token) {
+            return res.status(401).json({ message: 'Unauthorized' });
+        }
+    
+        try {
+            const decoded = jwt.verify(token, 'd82a43eb1d837f45e9e9a5c3fa213ba8c6728d68a6cd09a7f743cfa7a82a1f8cd44f00aa739b67c132f99039c07e9c69');
+            req.user = decoded;
+            next();
+        } catch (err) {
+            return res.status(401).json({ message: 'Invalid token' });
+        }
+    };
 
-//}
+    //}
 
 //routes{
+app.use(authenticateUser)
 
-app.get('/', (req , res)=>{
+app.get('/' ,(req , res)=>{
     res.sendFile("index.html");
 })
 
