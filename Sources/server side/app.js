@@ -5,11 +5,8 @@ const app = express();
 const sqlite3 = require('sqlite3').verbose()
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
-const cors = require('cors');
 const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser')
-
-
 //db{
 
 const db = new sqlite3.Database("./../../users data/users-data.db" ,(err)=>{
@@ -19,15 +16,29 @@ const db = new sqlite3.Database("./../../users data/users-data.db" ,(err)=>{
 })
 
 //}
+app.post('user-status' , (req, res, next) => {
+    const token = req.cookies.token || (req.headers.authorization && req.headers.authorization.split(' ')[1]);
 
+    if (!token) {
+        res.locals.userLoggedIn = 0;
+        return;
+    }
+
+    try {
+        const decoded = jwt.verify(token, 'd82a43eb1d837f45e9e9a5c3fa213ba8c6728d68a6cd09a7f743cfa7a82a1f8cd44f00aa739b67c132f99039c07e9c69');
+        req.user = decoded;
+        res.locals.userLoggedIn = 1;
+    } catch (err) {
+        res.locals.userLoggedIn = 0;
+    }
+    // return res.status(200).
+    console.log(locals.userLoggedIn)
+})
 
 app.use(express.static(path.join(__dirname , "../../")));
-app.use(bodyParser.json());
 app.use(cookieParser())
 
-
 // db.run(`DELETE FROM users`)
-
 
 app.use(session({
     secret: 'd82a43eb1d837f45e9e9a5c3fa213ba8c6728d68a6cd09a7f743cfa7a82a1f8cd44f00aa739b67c132f99039c07e9c69',
@@ -35,10 +46,16 @@ app.use(session({
     saveUninitialized: true,
     cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 }
 }));
+
+
+
+
+
 //signup page{
 
 app.post("/api-add-new-user" , (req , res)=>{
     info = req.body
+    console.log(info.password + `   ${info.email}`)
     if(info.password.length < 6){
         res.status(402).send()
     }
@@ -83,6 +100,8 @@ app.post("/api-add-new-user" , (req , res)=>{
 )
 
 //}
+
+
 
 // db.run(`
 // ALTER TABLE users
@@ -159,12 +178,8 @@ app.post("/api-add-new-user" , (req , res)=>{
     //}
 
 //routes{
-app.use(authenticateUser)
 
-app.get('/' ,(req , res)=>{
-    res.sendFile("index.html");
-})
-
+app.get('/',(req ,res ) => res.sendFile('index.html'));
 
 app.get("/signup" , (req , res)=>{
     res.sendFile(path.join(__dirname , "../../pages/signup.html"))

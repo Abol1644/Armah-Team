@@ -44,6 +44,9 @@ let password = document.getElementById('signin-password');
 let submit = document.getElementById('signin-submit');
 let rememberMe = document.getElementById('rememberMe')
 
+let loginStatus = 0;
+
+fetch('http://localhost:8000/user-status').then(data=>{console.log(data)})
 
 submit.addEventListener('click', async (e) => {
     e.preventDefault();
@@ -68,9 +71,7 @@ submit.addEventListener('click', async (e) => {
             document.getElementById('signedInSuccess').innerText = `${info.email} successfully signed in`;
             document.getElementById('homePage?').innerText = "Home?";
             document.getElementById('homePage?').href = '/';
-        } else if (data.status == 500) {
-            console.log(data.error);
-        } else if (data.status == 401) {
+        }else if (data.status == 401 || data.status ==500) {
             document.getElementById('main-form-container').style.display = "none";
             document.getElementById('glass-container').style.display = "flex";
             document.getElementById('signedInSuccess').innerText = `email or password wrong.`;
@@ -82,7 +83,5 @@ submit.addEventListener('click', async (e) => {
         console.log(err);
     });
 });
-
-
     </script>
 </html>
