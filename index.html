@@ -30,7 +30,7 @@
     <div id="middle" class="animated slideInDown" style="animation-delay:2.0s;">
         <h1 id="firstpage">Armah Developers<br>Team</h1>
         <h2 style="color : white;">Web Developers / Graphic Designers</h2>
-        <h2 style="cursor: default;"><i id="signupbutt" class="signbutt" ><a href="/signup">sign UP</a></i> <i id="pip" style="transition: 500ms;">|</i> <i id="singinbutt" class="signbutt"><a href="/signin">sign IN</a></i></h2>
+        <h2 id="signupin-container" style="cursor: default;"><i id="signupbutt" class="signbutt" ><a href="/signup">sign UP</a></i> <i id="pip" style="transition: 500ms;">|</i> <i id="singinbutt" class="signbutt"><a href="/signin">sign IN</a></i></h2>
         <div id="menu">
             <a onclick="showabout()">about</a>
             <a onclick="showwork()">work</a>
@@ -107,5 +107,17 @@
         </div>
     <script src="./Sources/Main.js" type="text/javascript"></script>
     <script src="./Sources/App.js"></script>
+    <script>
+        signupinContainer = document.getElementById('signupin-container')
+        fetch('http://localhost:8000/user-status' , {method:'POST'}).then(data=>
+            {
+                switch (data.status){
+                    case 200:
+                        signupinContainer.innerText = data.body.email
+                        break
+                }
+            }
+        )
+    </script>
 </body>
 </html>

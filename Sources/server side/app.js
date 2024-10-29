@@ -20,23 +20,25 @@ app.post('user-status' , (req, res, next) => {
     const token = req.cookies.token || (req.headers.authorization && req.headers.authorization.split(' ')[1]);
 
     if (!token) {
-        res.locals.userLoggedIn = 0;
-        return;
+        res.status(500)
     }
 
     try {
         const decoded = jwt.verify(token, 'd82a43eb1d837f45e9e9a5c3fa213ba8c6728d68a6cd09a7f743cfa7a82a1f8cd44f00aa739b67c132f99039c07e9c69');
         req.user = decoded;
-        res.locals.userLoggedIn = 1;
+        res.status(200).json({'email' : decoded.email})
     } catch (err) {
-        res.locals.userLoggedIn = 0;
+        res.status(401)
     }
     // return res.status(200).
     console.log(locals.userLoggedIn)
 })
 
-app.use(express.static(path.join(__dirname , "../../")));
+app.use(express.json())
 app.use(cookieParser())
+app.use(express.static(path.join(__dirname , "../../")))
+
+// app.use(cookieParser())
 
 // db.run(`DELETE FROM users`)
 
@@ -45,7 +47,7 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 }
-}));
+}))
 
 
 
@@ -88,10 +90,10 @@ app.post("/api-add-new-user" , (req , res)=>{
                             console.error(err)
                         })
                         res.status(200).send()
-                    });                    
+                    })
                 }
             }
-        });
+        })
     }
     else if(info.password != info.passwordConfirmation){
         res.status(400).send()
