@@ -49,6 +49,16 @@ submit = document.getElementById("submit-signup");
 
 
 
+fetch('http://localhost:8000/user-status', { method: 'POST' })
+        .then(response => {
+        if (response.status === 200) {
+            return response.json();
+        }
+        })
+        .then(data => {
+            window.location.replace("http://localhost:8000");
+        })
+
 submit.addEventListener("click",(a)=>{ 
   a.preventDefault()
   let info = {

@@ -44,9 +44,16 @@ let password = document.getElementById('signin-password');
 let submit = document.getElementById('signin-submit');
 let rememberMe = document.getElementById('rememberMe')
 
-let loginStatus = 0;
 
-fetch('http://localhost:8000/user-status').then(data=>{console.log(data)})
+        fetch('http://localhost:8000/user-status', { method: 'POST' })
+        .then(response => {
+        if (response.status === 200) {
+            return response.json();
+        }
+        })
+        .then(data => {
+            window.location.replace("http://localhost:8000");
+        })
 
 submit.addEventListener('click', async (e) => {
     e.preventDefault();

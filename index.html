@@ -105,19 +105,19 @@
                 </p>
             </section>
         </div>
-    <script src="./Sources/Main.js" type="text/javascript"></script>
-    <script src="./Sources/App.js"></script>
-    <script>
-        signupinContainer = document.getElementById('signupin-container')
-        fetch('http://localhost:8000/user-status' , {method:'POST'}).then(data=>
-            {
-                switch (data.status){
-                    case 200:
-                        signupinContainer.innerText = data.body.email
-                        break
-                }
-            }
-        )
+        <script>
+        let signupinContainer = document.getElementById('signupin-container')
+        fetch('http://localhost:8000/user-status', { method: 'POST' })
+        .then(response => {
+        if (response.status === 200) {
+            return response.json();
+        }
+        })
+        .then(data => {
+        signupinContainer.innerText = data.email;
+        })
     </script>
+    <script src="./Sources/Main.js" type="text/javascript"></script>
+
 </body>
 </html>

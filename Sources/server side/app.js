@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser')
+require('dotenv').config()
 //db{
 
 const db = new sqlite3.Database("./../../users data/users-data.db" ,(err)=>{
@@ -15,27 +16,30 @@ const db = new sqlite3.Database("./../../users data/users-data.db" ,(err)=>{
     }
 })
 
-//}
-app.post('user-status' , (req, res, next) => {
-    const token = req.cookies.token || (req.headers.authorization && req.headers.authorization.split(' ')[1]);
+app.use(cookieParser())
 
+//}
+
+//user status
+
+app.post("/user-status" , (req, res) => {
+    const token = req.cookies.token || (req.headers.authorization && req.headers.authorization.split(' ')[1]);
+    console.log(0)
     if (!token) {
         res.status(500)
     }
-
     try {
         const decoded = jwt.verify(token, 'd82a43eb1d837f45e9e9a5c3fa213ba8c6728d68a6cd09a7f743cfa7a82a1f8cd44f00aa739b67c132f99039c07e9c69');
         req.user = decoded;
-        res.status(200).json({'email' : decoded.email})
+        console.log(bodyParser.json({"email" : decoded.email}))
+        res.status(200).json({"email" : decoded.email})
     } catch (err) {
+        console.log(1 + err.message)
         res.status(401)
     }
-    // return res.status(200).
-    console.log(locals.userLoggedIn)
 })
 
 app.use(express.json())
-app.use(cookieParser())
 app.use(express.static(path.join(__dirname , "../../")))
 
 // app.use(cookieParser())
@@ -74,7 +78,7 @@ app.post("/api-add-new-user" , (req , res)=>{
                 if(row.email_exists){
                     res.status(401).send()
                 }
-                else if(!row.email_exists){
+                else{
 
                     const saltRounds = 10;
                     const plainPassword = info.password;
@@ -84,8 +88,6 @@ app.post("/api-add-new-user" , (req , res)=>{
                             console.error('Error hashing password:', err);
                             return;
                         }
-            
-                        console.log('Hashed password:', hash);
                         db.run(`INSERT INTO users(email,password) VALUES(?,?)` , [info.email , hash] , (err)=>{
                             console.error(err)
                         })
@@ -193,8 +195,8 @@ app.get("/signin" , (req , res)=>{
 })
 
 
-app.listen(8000 , ()=>{
-    console.log('app running on port 8000')
+app.listen(process.env.PORT , ()=>{
+    console.log(`app running on port ${process.env.PORT}`)
 })
 
 //}
