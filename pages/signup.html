@@ -41,53 +41,53 @@
 </div>
 
 </body>
-<script>
-email = document.getElementById("signup-email");
-password = document.getElementById("signup-password");
-passwordConfirmation = document.getElementById("signup-password-confirmation");
-submit = document.getElementById("submit-signup");
+<script type="module">
+  import {info} from "./../statics.js";
 
+  const email = document.getElementById("signup-email");
+  const password = document.getElementById("signup-password");
+  const passwordConfirmation = document.getElementById("signup-password-confirmation");
+  const submit = document.getElementById("submit-signup");
 
+  fetch(`${info.FDomain}/user-status`, { method: 'POST' })
+    .then(response => {
+      if (response.status === 200) {
+        return response.json();
+      }
+    })
+    .then(data => {
+      window.location.replace(`${info.FDomain}`);
+    });
 
-fetch('http://localhost:8000/user-status', { method: 'POST' })
-        .then(response => {
-        if (response.status === 200) {
-            return response.json();
-        }
-        })
-        .then(data => {
-            window.location.replace("http://localhost:8000");
-        })
+  submit.addEventListener("click", (a) => {
+    a.preventDefault();
+    let userInfo = {
+      'email': email.value,
+      'password': password.value,
+      'passwordConfirmation': passwordConfirmation.value
+    };
 
-submit.addEventListener("click",(a)=>{ 
-  a.preventDefault()
-  let info = {
-  'email' : email.value,
-  'password' : password.value,
-  'passwordConfirmation': passwordConfirmation.value}
-  fetch("http://localhost:8000/api-add-new-user" , {
-  method:'POST',
-  headers: {'content-type': 'application/json'},
-  body:JSON.stringify(info)
-}).then((data)=>{
-  if(data.status == 200){
-    document.getElementById('main-form-container').style.display = "none"
-    document.getElementById('glass-container').style.display = "flex"
-  }
-  else if(data.status == 400){
-    alert("password and passowrd confirmation difrence recongnized.\ntry again carefully.")
-    password.value = ''
-    passwordConfirmation.value = ''
-  }
-  else if(data.status == 401){
-    document.getElementById('signedUpSuccess').innerText = "email is already exists "
-    document.getElementById('main-form-container').style.display = "none"
-    document.getElementById('glass-container').style.display = "flex"
-  }
-  else if(data.status == 402){
-    document.getElementById("passisshort").style.display = "block"
-    }
-})
-})
+    fetch(`${info.FDomain}/api-add-new-user`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(userInfo)
+    }).then((data) => {
+      if (data.status == 200) {
+        document.getElementById('main-form-container').style.display = "none";
+        document.getElementById('glass-container').style.display = "flex";
+      } else if (data.status == 400) {
+        alert("Password and password confirmation difference recognized.\nTry again carefully.");
+        password.value = '';
+        passwordConfirmation.value = '';
+      } else if (data.status == 401) {
+        document.getElementById('signedUpSuccess').innerText = "Email already exists.";
+        document.getElementById('main-form-container').style.display = "none";
+        document.getElementById('glass-container').style.display = "flex";
+      } else if (data.status == 402) {
+        document.getElementById("passisshort").style.display = "block";
+      }
+    });
+  });
 </script>
+
 </html>

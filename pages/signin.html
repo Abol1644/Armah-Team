@@ -38,21 +38,22 @@
         </div>
     </div>
     </body>
-    <script>
+    <script type="module">
+import {info} from "./../statics.js"
 let email = document.getElementById('signin-email');
 let password = document.getElementById('signin-password');
 let submit = document.getElementById('signin-submit');
 let rememberMe = document.getElementById('rememberMe')
 
 
-        fetch('http://localhost:8000/user-status', { method: 'POST' })
+        fetch(`${info.FDomain}/user-status`, { method: 'POST' })
         .then(response => {
         if (response.status === 200) {
             return response.json();
         }
         })
         .then(data => {
-            window.location.replace("http://localhost:8000");
+            window.location.replace(`${info.FDomain}`);
         })
 
 submit.addEventListener('click', async (e) => {
@@ -60,22 +61,22 @@ submit.addEventListener('click', async (e) => {
     
 
 
-    let info = {
+    let userInfo = {
         'email': email.value,
         'password': password.value ,
         'rememberMe' : rememberMe.checked // Use .value to get the input field's value
     };
 
-    fetch('http://localhost:8000/signin-API', {
+    fetch(`${info.FDomain}/signin-API`, {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify(info)
+        body: JSON.stringify(userInfo)
     })
     .then(data => {
         if (data.status == 200) {
             document.getElementById('main-form-container').style.display = "none";
             document.getElementById('glass-container').style.display = "flex";
-            document.getElementById('signedInSuccess').innerText = `${info.email} successfully signed in`;
+            document.getElementById('signedInSuccess').innerText = `${userInfo.email} successfully signed in`;
             document.getElementById('homePage?').innerText = "Home?";
             document.getElementById('homePage?').href = '/';
         }else if (data.status == 401 || data.status ==500) {
